@@ -17,14 +17,14 @@ final class Modifier: Model {
     var id: Node?
     var name: String
     var image_url: String
-    var required: Int
+    var required: Bool
     var unit_type: String
     var unit_bounds: String
     var price_addition: Double
     var description: String
     var item_id: Int
     
-    init(name: String, description: String, image_url: String, required: Int, unit_type: String, unit_bounds: String, price_addition: Double, item_id: Int) throws {
+    init(name: String, description: String, image_url: String, required: Bool, unit_type: String, unit_bounds: String, price_addition: Double, item_id: Int) throws {
         self.id = nil
         self.name = name
         self.description = description
@@ -49,17 +49,29 @@ final class Modifier: Model {
     }
     
     func makeNode(context: Context) throws -> Node {
-        return try Node(node: [
-            "id": id,
-            "name": name,
-            "description": description,
-            "image_url": image_url,
-            "required": required,
-            "unit_type": unit_type,
-            "unit_bounds": unit_bounds,
-            "price_addition": price_addition,
-            "item_id": item_id
-            ])
+        var node: [String: Node] = [:]
+        node["id"] = id
+        node["name"] = name.makeNode()
+        node["description"] = description.makeNode()
+        node["image_url"] = image_url.makeNode()
+        node["required"] = required.makeNode()
+        node["unit_type"] = unit_type.makeNode()
+        node["unit_bounds"] = unit_bounds.makeNode()
+        node["price_addition"] = price_addition.makeNode()
+        
+        if context is DatabaseContext {
+            node["item_id"] = try item_id.makeNode()
+        }
+        
+        if context is JSONContext {
+            let options = try self.options().all().map { (option: Option) -> Node in
+                return try option.makeNode(context: context)
+            }
+            
+            node["options"] = Node.array(options)
+        }
+        
+        return Node.object(node)
     } 
     
     static func prepare(_ database: Database) throws {

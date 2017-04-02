@@ -24,7 +24,6 @@ final class Item: Model {
         self.description = description
         self.image_url = image_url
         self.base_price = base_price
-        
     }
     
     init(node: Node, in context: Context) throws {
@@ -36,13 +35,22 @@ final class Item: Model {
     }
     
     func makeNode(context: Context) throws -> Node {
-        return try Node(node: [
-            "id": id,
-            "name": name,
-            "description": description,
-            "image_url": image_url,
-            "base_price": base_price
-            ])
+        var node: [String: Node] = [:]
+        node["id"] = id
+        node["name"] = name.makeNode()
+        node["description"] = description.makeNode()
+        node["image_url"] = image_url.makeNode()
+        node["base_price"] = base_price.makeNode()
+        
+        if context is JSONContext {
+            let modifiers = try self.modifiers().all().map { (modifier: Modifier) in
+                return try modifier.makeNode(context: context)
+            }
+            
+            node["modifiers"] = Node.array(modifiers)
+        }
+        
+        return Node.object(node)
     }
     
     static func prepare(_ database: Database) throws {

@@ -19,6 +19,14 @@ for prep in preparations {
 
 // testing
 
+drop.get("inventory") { request in
+    do {
+        return try Item.all().makeJSON()
+    } catch {
+        throw Abort.badRequest
+    }
+}
+
 drop.get { req in
     return try drop.view.make("welcome", [
     	"message": drop.localization[req.lang, "welcome", "title"]
