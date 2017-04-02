@@ -16,15 +16,15 @@ final class Modifier: Model {
     
     var id: Node?
     var name: String
-    var image_url: String
+    var image_url: String?
     var required: Bool
     var unit_type: String
-    var unit_bounds: String
-    var price_addition: Double
-    var description: String
+    var unit_bounds: String?
+    var price_addition: Double?
+    var description: String?
     var item_id: Int
     
-    init(name: String, description: String, image_url: String, required: Bool, unit_type: String, unit_bounds: String, price_addition: Double, item_id: Int) throws {
+    init(name: String, description: String?, image_url: String?, required: Bool, unit_type: String, unit_bounds: String?, price_addition: Double?, item_id: Int) throws {
         self.id = nil
         self.name = name
         self.description = description
@@ -52,12 +52,12 @@ final class Modifier: Model {
         var node: [String: Node] = [:]
         node["id"] = id
         node["name"] = name.makeNode()
-        node["description"] = description.makeNode()
-        node["image_url"] = image_url.makeNode()
+        node["description"] = description?.makeNode() ?? Node.null
+        node["image_url"] = image_url?.makeNode() ?? Node.null
         node["required"] = required.makeNode()
         node["unit_type"] = unit_type.makeNode()
-        node["unit_bounds"] = unit_bounds.makeNode()
-        node["price_addition"] = price_addition.makeNode()
+        node["unit_bounds"] = unit_bounds?.makeNode() ?? Node.null
+        node["price_addition"] = price_addition?.makeNode() ?? Node.null
         
         if context is DatabaseContext {
             node["item_id"] = try item_id.makeNode()
@@ -70,7 +70,6 @@ final class Modifier: Model {
             
             node["options"] = Node.array(options)
         }
-        
         return Node.object(node)
     } 
     
@@ -78,12 +77,12 @@ final class Modifier: Model {
         try database.create(entity) { modifier in
             modifier.id()
             modifier.string("name")
-            modifier.string("description")
-            modifier.string("image_url")
+            modifier.string("description", optional: true)
+            modifier.string("image_url", optional: true)
             modifier.bool("required")
             modifier.string("unit_type")
-            modifier.string("unit_bounds")
-            modifier.string("price_addition")
+            modifier.string("unit_bounds", optional: true)
+            modifier.string("price_addition", optional: true)
             modifier.parent(Item.self, optional: false, unique: false, default: nil)
         }
     }

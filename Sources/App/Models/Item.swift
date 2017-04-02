@@ -14,8 +14,8 @@ import Fluent
 final class Item: Model {
     var id: Node?
     var name: String
-    var description: String
-    var image_url: String
+    var description: String?
+    var image_url: String?
     var base_price: Double
     
     init(name: String, description: String, image_url: String, base_price: Double) throws {
@@ -38,8 +38,8 @@ final class Item: Model {
         var node: [String: Node] = [:]
         node["id"] = id
         node["name"] = name.makeNode()
-        node["description"] = description.makeNode()
-        node["image_url"] = image_url.makeNode()
+        node["description"] = description?.makeNode() ?? Node.null
+        node["image_url"] = image_url?.makeNode() ?? Node.null
         node["base_price"] = base_price.makeNode()
         
         if context is JSONContext {
@@ -57,8 +57,8 @@ final class Item: Model {
         try database.create(entity) { item in
             item.id()
             item.string("name")
-            item.string("description")
-            item.string("image_url")
+            item.string("description", optional: true)
+            item.string("image_url", optional: true)
             item.double("base_price")
         }
     }
