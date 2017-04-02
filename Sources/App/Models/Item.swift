@@ -12,6 +12,9 @@ import Fluent
 
 
 final class Item: Model {
+    
+    var exists: Bool = false
+    
     var id: Node?
     var name: String
     var description: String?

@@ -13,6 +13,8 @@ import Fluent
 
 final class Order: Model {
     
+    var exists: Bool = false
+    
     static var entity: String = "order"
     
     var id: Node?

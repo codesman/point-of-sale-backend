@@ -13,9 +13,9 @@ import Fluent
 
 final class OrderedOption: Model {
     
+    var exists: Bool = false
     
     static var entity: String = "orderedoption"
-    
     
     var id: Node?
     var name: String

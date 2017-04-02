@@ -13,6 +13,8 @@ import Fluent
 
 final class Option: Model {
     
+    var exists: Bool = false
+    
     static var entity: String = "option"
     
     var id: Node?

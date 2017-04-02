@@ -12,6 +12,7 @@ import Fluent
 
 final class OrderedModifier: Model {
     
+    var exists: Bool = false
     
     static var entity: String = "orderedmodifier"
     

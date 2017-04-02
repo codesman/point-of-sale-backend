@@ -21,7 +21,7 @@ for prep in preparations {
 
 drop.get("inventory") { request in
     do {
-        return try Item.all().makeJSON()
+        return try JSON(node: Item.all().makeNode(context: JSONContext()))
     } catch {
         throw Abort.badRequest
     }

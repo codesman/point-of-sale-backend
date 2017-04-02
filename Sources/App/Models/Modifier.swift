@@ -12,6 +12,8 @@ import Fluent
 
 final class Modifier: Model {
     
+    var exists: Bool = false
+    
     static var entity: String = "modifier"
     
     var id: Node?

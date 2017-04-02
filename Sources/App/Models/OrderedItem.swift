@@ -12,6 +12,8 @@ import Fluent
 
 final class OrderedItem: Model {
     
+    var exists: Bool = false
+    
     static var entity: String = "ordereditem"
     
     var id: Node?
