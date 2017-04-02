@@ -80,6 +80,12 @@
       "version": "1.0.1"
     },
     {
+      "package": "ObjectMapper",
+      "reason": null,
+      "repositoryURL": "https://github.com/Hearst-DD/ObjectMapper.git",
+      "version": "2.2.5"
+    },
+    {
       "package": "PathIndexable",
       "reason": null,
       "repositoryURL": "https://github.com/vapor/path-indexable.git",

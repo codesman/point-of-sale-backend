@@ -12,43 +12,52 @@ import Fluent
 
 
 final class Option: Model {
+    
+    static var entity: String = "option"
+    
     var id: Node?
-    var option_name: String
+    var name: String
     var price_addition: Float
     var description: String
-    var fk_modifier_id: Int?
+    var modifier_id: Int
     
-    init(option_name: String, description: String, price_addition: Float, fk_modifier_id: Int?) {
+    init(name: String, description: String, price_addition: Float, modifier_id: Int) {
         self.id = nil
-        self.option_name = option_name
+        self.name = name
         self.price_addition = price_addition
         self.description = description
-        self.fk_modifier_id = fk_modifier_id
+        self.modifier_id = modifier_id
     }
     
     init(node: Node, in context: Context) throws {
-        id = try node.extract("option_id")
-        option_name = try node.extract("option_name")
+        id = try node.extract("id")
+        name = try node.extract("name")
         description = try node.extract("description")
         price_addition = try node.extract("price_addition")
-        fk_modifier_id = try node.extract("fk_modifier_id")
+        modifier_id = try node.extract("modifier_id")
     }
     
     func makeNode(context: Context) throws -> Node {
         return try Node(node: [
-            "option_id": id,
+            "id": id,
             "price_addition": price_addition,
-            "option_name": option_name,
+            "name": name,
             "description": description,
-            "fk_modifier_id": fk_modifier_id
+            "modifier_id": modifier_id
             ])
     }
     
     static func prepare(_ database: Database) throws {
-        //
+        try database.create(entity) { option in
+            option.id()
+            option.string("name")
+            option.string("description")
+            option.double("price_addition")
+            option.parent(Modifier.self, optional: false, unique: false, default: nil)
+        }
     }
     
     static func revert(_ database: Database) throws {
-        //
+        try database.delete(entity)
     }
 }

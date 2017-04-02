@@ -1,4 +1,5 @@
 import Vapor
+import Fluent
 import VaporSQLite
 
 let drop = Droplet()
@@ -9,6 +10,14 @@ do {
     print("Couldn't initialize VaporSQLite Provider")
 }
 
+let preparations: [Preparation.Type] = [Item.self, Modifier.self, Option.self, Order.self, OrderedItem.self, OrderedModifier.self, OrderedOption.self]
+
+for prep in preparations {
+    drop.preparations.append(prep)
+}
+
+
+// testing
 
 drop.get { req in
     return try drop.view.make("welcome", [
