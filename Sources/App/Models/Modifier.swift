@@ -79,4 +79,8 @@ final class Modifier: Model {
     static func revert(_ database: Database) throws {
         try database.delete(entity)
     }
+    
+    func options() -> Children<Option> {
+        return children()
+    }
 }

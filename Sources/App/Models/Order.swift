@@ -51,4 +51,8 @@ final class Order: Model {
     static func revert(_ database: Database) throws {
         try database.delete(entity)
     }
+    
+    func ordereditems() -> Children<OrderedItem> {
+        return children()
+    }
 }

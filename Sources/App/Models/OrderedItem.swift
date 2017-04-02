@@ -69,4 +69,8 @@ final class OrderedItem: Model {
     static func revert(_ database: Database) throws {
         try database.delete(entity)
     }
+    
+    func orderedmodifiers() -> Children<OrderedModifier> {
+        return children()
+    }
 }

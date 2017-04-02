@@ -59,9 +59,8 @@ final class Item: Model {
         try database.delete(entity)
     }
     
-    func modifiers() throws -> Children<Modifier> {
-        return try children()
+    func modifiers() -> Children<Modifier> {
+        return children()
     }
-    
 }
 
