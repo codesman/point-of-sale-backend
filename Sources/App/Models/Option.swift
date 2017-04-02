@@ -11,7 +11,7 @@ import Vapor
 import Fluent
 
 
-final class Option: Model, Preparation {
+final class Option: Model {
     var id: Node?
     var option_name: String
     var price_addition: Float

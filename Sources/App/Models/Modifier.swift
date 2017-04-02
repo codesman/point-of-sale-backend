@@ -10,7 +10,7 @@ import Foundation
 import Vapor
 import Fluent
 
-final class Modifier: Model, Preparation {
+final class Modifier: Model {
     var id: Node?
     var modifier_name: String
     var image_url: String
@@ -55,7 +55,7 @@ final class Modifier: Model, Preparation {
             "unit_type": unit_type,
             "unit_bounds": unit_bounds,
             "price_addition": price_addition,
-            "fk_item_id": fk_item_id
+            "fk_item_id": fk_item_id ?? Node.null
             ])
     } 
     

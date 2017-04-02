@@ -10,7 +10,7 @@ import Foundation
 import Vapor
 import Fluent
 
-final class OrderedItem: Model, Preparation {
+final class OrderedItem: Model {
     var id: Node?
     var ordereditem_name: String
     var description: String
@@ -32,6 +32,7 @@ final class OrderedItem: Model, Preparation {
         ordereditem_name = try node.extract("ordereditem_name")
         description = try node.extract("description")
         image_url = try node.extract("image_url")
+        quantity = try node.extract("quantity")
         base_price = try node.extract("base_price")
     }
     

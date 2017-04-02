@@ -10,7 +10,7 @@ import Foundation
 import Vapor
 import Fluent
 
-final class OrderedModifier: Model, Preparation {
+final class OrderedModifier: Model {
     var id: Node?
     var orderedmodifier_name: String
     var image_url: String
@@ -20,7 +20,7 @@ final class OrderedModifier: Model, Preparation {
     var price_addition: Float
     var description: String
     var quantity: Int
-    var fk_ordereditem_id: Int
+    var fk_ordereditem_id: Int?
     
     init(orderedmodifier_name: String, description: String, image_url: String, required: Int, unit_type: String, unit_bounds: String, price_addition: Float, fk_ordereditem_id: Int?, quantity: Int) throws {
         self.id = nil
@@ -44,20 +44,22 @@ final class OrderedModifier: Model, Preparation {
         unit_type = try node.extract("unit_type")
         unit_bounds = try node.extract("unit_bounds")
         price_addition = try node.extract("price_addition")
+        quantity = try node.extract("quantity")
         fk_ordereditem_id = try node.extract("fk_ordereditem_id")
     }
     
     func makeNode(context: Context) throws -> Node {
         return try Node(node: [
             "orderedmodifier_id": id,
-            "orderedmodifier_name": modifier_name,
+            "orderedmodifier_name": orderedmodifier_name,
             "description": description,
             "image_url": image_url,
             "required": required,
             "unit_type": unit_type,
             "unit_bounds": unit_bounds,
             "price_addition": price_addition,
-            "fk_ordereditem_id": fk_ordereditem_id
+            "fk_ordereditem_id": fk_ordereditem_id,
+            "quantity": quantity
             ])
     }
     

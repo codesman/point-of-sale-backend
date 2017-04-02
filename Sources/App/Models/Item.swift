@@ -11,7 +11,7 @@ import Vapor
 import Fluent
 
 
-final class Item: Model, Preparation {
+final class Item: Model {
     var id: Node?
     var item_name: String
     var description: String
