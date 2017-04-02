@@ -1,15 +1,11 @@
-# Basic Template
+# POS Backend Example
 
-A basic vapor template for starting a new Vapor web application. If you're using vapor toolbox, you can use: `vapor new --template=basic`
+A work in progress. Will become the backend for the POS Example app I'm creating.
 
 ## 📖 Documentation
 
-Visit the Vapor web framework's [documentation](http://docs.vapor.codes) for instructions on how to use this package.
+Visit the Vapor web framework's [documentation](http://docs.vapor.codes)
 
 ## 💧 Community
 
 Join the welcoming community of fellow Vapor developers in [slack](http://vapor.team).
-
-## 🔧 Compatibility
-
-This package has been tested on macOS and Ubuntu.
