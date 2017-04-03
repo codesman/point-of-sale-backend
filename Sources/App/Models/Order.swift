@@ -35,11 +35,20 @@ final class Order: Model {
     }
     
     func makeNode(context: Context) throws -> Node {
-        return try Node(node: [
-            "id": id,
-            "order_date": order_date.timeIntervalSince1970,
-            "order_total": order_total
-            ])
+        var node: [String: Node] = [:]
+        node["id"] = id
+        node["order_date"] = order_date.timeIntervalSince1970.makeNode()
+        node["order_total"] = order_total.makeNode()
+        
+        if context is JSONContext {
+            let items = try self.ordereditems().all().map {
+                return try $0.makeNode(context: context)
+            }
+            
+            node["items"] = Node.array(items)
+        }
+        
+        return Node.object(node)
     }
     
     static func prepare(_ database: Database) throws {

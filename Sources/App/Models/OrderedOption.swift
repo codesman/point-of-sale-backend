@@ -20,11 +20,11 @@ final class OrderedOption: Model {
     var id: Node?
     var name: String
     var price_addition: Double
-    var description: String
+    var description: String?
     var quantity: Int
     var orderedmodifier_id: Int
     
-    init(name: String, description: String, quantity: Int, price_addition: Double, orderedmodifier_id: Int) {
+    init(name: String, description: String?, quantity: Int, price_addition: Double, orderedmodifier_id: Int) {
         self.id = nil
         self.name = name
         self.quantity = quantity
@@ -43,21 +43,25 @@ final class OrderedOption: Model {
     }
     
     func makeNode(context: Context) throws -> Node {
-        return try Node(node: [
-            "id": id,
-            "price_addition": price_addition,
-            "name": name,
-            "description": description,
-            "orderedmodifier_id": orderedmodifier_id,
-            "quantity": quantity
-            ])
+        var node: [String: Node] = [:]
+        node["id"] = id
+        node["price_addition"] = price_addition.makeNode()
+        node["name"] = name.makeNode()
+        node["description"] = description?.makeNode() ?? Node.null
+        node["quantity"] = try quantity.makeNode()
+        
+        if context is DatabaseContext {
+            node["orderedmodifier_id"] = try orderedmodifier_id.makeNode()
+        }
+        
+        return Node.object(node)
     }
     
     static func prepare(_ database: Database) throws {
         try database.create(entity) { option in
             option.id()
             option.string("name")
-            option.string("description")
+            option.string("description", optional: true)
             option.double("price_addition")
             option.int("quantity")
             option.parent(OrderedModifier.self, optional: false, unique: false, default: nil)

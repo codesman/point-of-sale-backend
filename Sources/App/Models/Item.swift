@@ -21,7 +21,7 @@ final class Item: Model {
     var image_url: String?
     var base_price: Double
     
-    init(name: String, description: String, image_url: String, base_price: Double) throws {
+    init(name: String, description: String?, image_url: String?, base_price: Double) throws {
         self.id = nil
         self.name = name
         self.description = description

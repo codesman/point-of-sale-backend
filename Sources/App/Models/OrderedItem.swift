@@ -18,13 +18,13 @@ final class OrderedItem: Model {
     
     var id: Node?
     var name: String
-    var description: String
-    var image_url: String
+    var description: String?
+    var image_url: String?
     var base_price: Float
     var quantity: Int
     var order_id: Int
     
-    init(name: String, description: String, image_url: String, base_price: Float, quantity: Int, order_id: Int) throws {
+    init(name: String, description: String?, image_url: String?, base_price: Float, quantity: Int, order_id: Int) throws {
         self.id = nil
         self.name = name
         self.description = description
@@ -45,15 +45,27 @@ final class OrderedItem: Model {
     }
     
     func makeNode(context: Context) throws -> Node {
-        return try Node(node: [
-            "id": id,
-            "name": name,
-            "description": description,
-            "image_url": image_url,
-            "base_price": base_price,
-            "quantity": quantity,
-            "order_id": order_id
-            ])
+        var node: [String: Node] = [:]
+        node["id"] = id
+        node["name"] = name.makeNode()
+        node["description"] = description?.makeNode() ?? Node.null
+        node["image_url"] = image_url?.makeNode() ?? Node.null
+        node["base_price"] = base_price.makeNode()
+        node["quantity"] = try quantity.makeNode()
+        
+        if context is DatabaseContext {
+            node["order_id"] = try order_id.makeNode()
+        }
+        
+        if context is JSONContext {
+            let modifiers = try self.orderedmodifiers().all().map { (modifier: OrderedModifier) in
+                return try modifier.makeNode(context: context)
+            }
+            
+            node["modifiers"] = Node.array(modifiers)
+        }
+        
+        return Node.object(node)
     }
     
     static func prepare(_ database: Database) throws {
